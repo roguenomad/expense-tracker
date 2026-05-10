@@ -42,6 +42,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log(selectedMonth, selectedYear, category, amount);
 
+        if (!selectedMonth || !selectedYear) {
+            alert("Month or year not selected");
+            return;
+        }
+
+        if (!expenses[selectedMonth]) {
+            expenses[selectedMonth] = { Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 };
+        }
+
+        const currentAmount = expenses[selectedMonth][category] || 0;
+
+        if (amount > 0) {
+            expenses[selectedMonth][category] = currentAmount + amount;
+        } else if (amount < 0 && currentAmount >= Math.abs(amount)) {
+             expenses[selectedMonth][category] = currentAmount + amount;
+        } else {
+            alert('Invalid amount: Amount cannot be below zero');
+        }
+
+        console.log(expenses[selectedMonth], expenses[selectedMonth][category]);
+        amountInput.value = "";
     }
 
     expenseForm.addEventListener('submit', handleSubmit);
