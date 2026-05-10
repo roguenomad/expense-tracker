@@ -31,6 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
         December: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
     };
 
+    // Load expenses
+    function getExpensesFromLocalStorage(month, year) {
+        const key = `${month}-${year}`;
+        return JSON.parse(localStorage.getItem(key)) || {};
+    }
+
+    // Save expenses
+
+    function saveExpensesToLocalStorage(month, year) {
+        const key = `${month}-${year}`;
+        localStorage.setItem(key, JSON.stringify(expenses[month]));
+    }
+
     // Handle form submission
     function handleSubmit(event) {
         event.preventDefault();
@@ -40,8 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const category = event.target.category.value;
         const amount = parseFloat(event.target.amount.value);
 
-        console.log(selectedMonth, selectedYear, category, amount);
-
         if (!selectedMonth || !selectedYear) {
             alert("Month or year not selected");
             return;
@@ -50,6 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!expenses[selectedMonth]) {
             expenses[selectedMonth] = { Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 };
         }
+
+        const expenseData = getExpensesFromLocalStorage(selectedMonth, selectedYear);
+        Object.assign(expenses[selectedMonth], expenseData);
 
         const currentAmount = expenses[selectedMonth][category] || 0;
 
@@ -62,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         console.log(expenses[selectedMonth], expenses[selectedMonth][category]);
+        saveExpensesToLocalStorage(selectedMonth, selectedYear);
         amountInput.value = "";
     }
 
