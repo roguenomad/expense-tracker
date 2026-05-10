@@ -31,7 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
         December: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
     };
 
-    console.log(expenses.November);
+    // Handle form submission
+    function handleSubmit(event) {
+        event.preventDefault();
+        console.log(event);
+    }
+
+    expenseForm.addEventListener('submit', handleSubmit);
 
     //Set default month and year based on current month and year
 
