@@ -34,7 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle form submission
     function handleSubmit(event) {
         event.preventDefault();
-        console.log(event);
+        
+        const selectedMonth = monthSelect.value;
+        const selectedYear = yearSelect.value;
+        const category = event.target.category.value;
+        const amount = parseFloat(event.target.amount.value);
+
+        console.log(selectedMonth, selectedYear, category, amount);
+
     }
 
     expenseForm.addEventListener('submit', handleSubmit);
