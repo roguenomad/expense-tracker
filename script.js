@@ -14,6 +14,25 @@ document.addEventListener('DOMContentLoaded', () => {
         yearSelect.appendChild(option);
     }
 
+    //Initialize expenses object with categories
+
+    const expenses = {
+        January: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+        Febuary: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+        March: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+        April: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+        May: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+        June: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+        July: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+        August: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+        September: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+        October: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+        November: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+        December: {Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 },
+    };
+
+    console.log(expenses.November);
+
     //Set default month and year based on current month and year
 
     function setDefaultMonthYear() {
