@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let selectedMonth;
     let selectedYear;
+    let myChart;
 
     //Generate year options dynamically
 
@@ -66,15 +67,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //Update Chart
-    function updateChart () {
+    function updateChart() {
         getSelectedMonthYear();
 
         const expenseData = getExpensesFromLocalStorage(selectedMonth, selectedYear);
         Object.assign(expenses[selectedMonth], expenseData);
 
         const ctx = expenseChart.getContext('2d');
+
+        if (myChart) {
+            myChart.destroy();
+        }
         
-        new Chart(ctx, {
+        myChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
             labels: Object.keys(expenses[selectedMonth]),
@@ -131,10 +136,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         saveExpensesToLocalStorage(selectedMonth, selectedYear);
+        updateChart();
         amountInput.value = "";
     }
 
     expenseForm.addEventListener('submit', handleSubmit);
+    monthSelect.addEventListener('change', updateChart);
+    yearSelect.addEventListener('change', updateChart);
 
     //Set default month and year based on current month and year
 
