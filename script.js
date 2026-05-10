@@ -1,9 +1,14 @@
+// const { response } = require("express");
+
 document.addEventListener('DOMContentLoaded', () => {
     const expenseForm = document.getElementById('expense-form');
     const monthSelect = document.getElementById('month');
     const yearSelect = document.getElementById('year');
     const amountInput = document.getElementById('amount');
     const expenseChart = document.getElementById('expense-chart');
+
+    let selectedMonth;
+    let selectedYear;
 
     //Generate year options dynamically
 
@@ -44,38 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem(key, JSON.stringify(expenses[month]));
     }
 
-    //Update Chart
-    function updateChart () {
-        const ctx = expenseChart.getContext('2d');
-        
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                borderWidth: 1
-            }]
-            },
-            options: {
-            scales: {
-                y: {
-                beginAtZero: true
-                }
-            }
-            }
-        });
-    }
+    // Get Selected Month & Year
+    function getSelectedMonthYear() {
+        selectedMonth = monthSelect.value;
+        selectedYear = yearSelect.value;
 
-    // Handle form submission
-    function handleSubmit(event) {
-        event.preventDefault();
-        
-        const selectedMonth = monthSelect.value;
-        const selectedYear = yearSelect.value;
-        const category = event.target.category.value;
-        const amount = parseFloat(event.target.amount.value);
 
         if (!selectedMonth || !selectedYear) {
             alert("Month or year not selected");
@@ -85,10 +63,63 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!expenses[selectedMonth]) {
             expenses[selectedMonth] = { Rent: 0, Food: 0, Transportation: 0, Bills: 0, Miscellaneous: 0 };
         }
+    }
+
+    //Update Chart
+    function updateChart () {
+        getSelectedMonthYear();
 
         const expenseData = getExpensesFromLocalStorage(selectedMonth, selectedYear);
         Object.assign(expenses[selectedMonth], expenseData);
 
+        const ctx = expenseChart.getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+            labels: Object.keys(expenses[selectedMonth]),
+            datasets: [{
+                data: Object.values(expenses[selectedMonth]),
+                backgroundColor: [
+                    '#FF6384', //Rent
+                    '#4CAF50', //Food
+                    '#FFCE56', //Transportation
+                    '#36A2EB', //Bills
+                    '#ff9f40' //Misc
+                ],
+            }]
+            },
+            options: {
+                response: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `${tooltipItem.label}: $${tooltipItem.raw}`;
+                            }
+                        }
+                    }
+                }
+            // scales: {
+            //     y: {
+            //     beginAtZero: true
+            //     }
+            // }
+            }
+        });
+    }
+
+    // Handle form submission
+    function handleSubmit(event) {
+        event.preventDefault();
+        getSelectedMonthYear();
+    
+        const category = event.target.category.value;
+        const amount = parseFloat(event.target.amount.value);
         const currentAmount = expenses[selectedMonth][category] || 0;
 
         if (amount > 0) {
@@ -99,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Invalid amount: Amount cannot be below zero');
         }
 
-        console.log(expenses[selectedMonth], expenses[selectedMonth][category]);
         saveExpensesToLocalStorage(selectedMonth, selectedYear);
         amountInput.value = "";
     }
