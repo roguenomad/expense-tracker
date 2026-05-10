@@ -44,6 +44,30 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem(key, JSON.stringify(expenses[month]));
     }
 
+    //Update Chart
+    function updateChart () {
+        const ctx = expenseChart.getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                borderWidth: 1
+            }]
+            },
+            options: {
+            scales: {
+                y: {
+                beginAtZero: true
+                }
+            }
+            }
+        });
+    }
+
     // Handle form submission
     function handleSubmit(event) {
         event.preventDefault();
@@ -93,5 +117,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setDefaultMonthYear();
-
+    updateChart();
 });
